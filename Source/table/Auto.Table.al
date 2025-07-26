@@ -31,9 +31,9 @@ table 74013 SIGIAuto
             trigger OnValidate()
             var
                 CurrentYear: Integer;
-                ManufactureYearErr: Label 'Neteisinga pagaminimo metų reikšmė';
+                ManufactureYearErr: Label 'Neteisingi pagaminimo metai';
             begin
-                CurrentYear := DATE2DMY(TODAY, 3); // gets current year as integer
+                CurrentYear := DATE2DMY(TODAY, 3); // Extracts current year as integer
                 if ("ManufactureYear" < 1885) or ("ManufactureYear" > CurrentYear) then
                     Error(ManufactureYearErr);
             end;
@@ -87,7 +87,7 @@ table 74013 SIGIAuto
     var
         AutoSetup: Record SIGIAutoSetup;
         Auto: Record SIGIAuto;
-        NoSeries: Codeunit "No. Series";
+        NoSeries: Codeunit Microsoft.Foundation.NoSeries."No. Series";
     begin
         AutoSetup.GetRecordOnce();
         if NoSeries.AreRelated(AutoSetup."Automobile No. Series", xRec."No. Series") then

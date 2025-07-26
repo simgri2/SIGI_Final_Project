@@ -10,6 +10,10 @@ permissionset 74010 SIGIPermissions
         tabledata SIGIAuto = RIMD,
         table SIGIAuto = X,
         tabledata SIGIAutoReservation = RIMD,
-        table SIGIAutoReservation = X;
+        table SIGIAutoReservation = X,
+        tabledata SIGIAutoDamage = RIMD,
+        table SIGIAutoDamage = X,
+        tabledata SIGIAutoRentHeader = RIMD,
+        table SIGIAutoRentHeader = X;
 
 }

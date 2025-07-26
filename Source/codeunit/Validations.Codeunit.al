@@ -20,4 +20,38 @@ codeunit 74010 SIGIValidations
         if not ExistingRes.IsEmpty() then
             Error(ReservationOverlapErr);
     end;
+
+    procedure ValidateReservationExists(RentHeader: Record "SIGIAutoRentHeader")
+    var
+        Reservation: Record "SIGIAutoReservation";
+        RentFromDate: Date;
+        RentToDate: Date;
+        ResFromDate: Date;
+        ResToDate: Date;
+        ReservationDateErr: Label 'Nerasta atitinkama rezervacija.';
+    begin
+        if (RentHeader."ReservedFrom" = 0D) or (RentHeader."ReservedTo" = 0D) then
+            exit; // if fields are still empty, ignore validation
+
+        RentFromDate := RentHeader.ReservedFrom;
+        RentToDate := RentHeader.ReservedTo;
+
+        Reservation.SetRange("Auto No.", RentHeader."Auto No.");
+        Reservation.SetRange("Client No.", RentHeader."Client No.");
+
+        if Reservation.FindSet() then
+            repeat
+                ResFromDate := DT2Date(Reservation.ReservedFrom);
+                ResToDate := DT2Date(Reservation.ReservedTo);
+
+                // Check if RentHeader date range is within or equal to Reservation's date range
+                if (RentFromDate >= ResFromDate) and
+                   (RentToDate <= ResToDate) then
+                    exit; // Valid match found
+            until Reservation.Next() = 0;
+
+        Error(ReservationDateErr);
+    end;
+
+
 }
