@@ -1,0 +1,32 @@
+{
+  "id": "c3d195d1-17bc-4b48-9f12-79862e29a5bd",
+  "name": "AcademyFinal",
+  "publisher": "SIGI",
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "26.0.0.0",
+  "idRanges": [
+    {
+      "from": 74010,
+      "to": 74999
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "15.0",
+  "features": [
+    "NoImplicitWith"
+  ]
+}
