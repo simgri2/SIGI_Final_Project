@@ -36,20 +36,23 @@ page 74015 SIGIAutoReservation
         }
     }
 
-    /*
     actions
     {
         area(Processing)
         {
-            action(ActionName)
+            action(CurrentReservations)
             {
+                Caption = 'Galiojančios rezervacijos';
+                Image = ReleaseDoc;
+                ToolTip = 'Rodyti galiojančių rezervacijų sąrašą.';
 
                 trigger OnAction()
+                var
+                    CurrentReservations: Page SIGICurrentReservations;
                 begin
-
+                    CurrentReservations.Run();
                 end;
             }
         }
     }
-    */
 }

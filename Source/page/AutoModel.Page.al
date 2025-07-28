@@ -26,10 +26,5 @@ page 74012 SIGIAutoModel
                 }
             }
         }
-        area(Factboxes)
-        {
-
-        }
     }
-
 }

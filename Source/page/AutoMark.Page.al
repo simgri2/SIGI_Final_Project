@@ -22,28 +22,5 @@ page 74011 SIGIAutoMark
                 }
             }
         }
-        area(Factboxes)
-        {
-
-        }
     }
-
-    /*
-        actions
-        {
-            area(Processing)
-            {
-                action(ActionName)
-                {
-
-                    trigger OnAction()
-                    begin
-
-                    end;
-                }
-            }
-        }
-        */
-
-
 }

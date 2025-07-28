@@ -12,52 +12,59 @@ page 74019 SIGIAutoRentHeaderCard
         {
             group(GroupName)
             {
+                Editable = IsEditable;
+                Caption = 'Nuomos sutartis';
 
                 field("Nr."; Rec."Nr.")
                 {
                     ToolTip = 'Nuomos kortelės Nr.', Comment = '%';
-                    Editable = IsEditable;
                 }
                 field("Client No."; Rec."Client No.")
                 {
                     ToolTip = 'Kliento Nr.', Comment = '%';
-                    Editable = IsEditable;
-                }
-                field("Driver License Image"; Rec."Driver License Image")
-                {
-                    ToolTip = 'Vairuotojo pažymėjimo nuotrauka.', Comment = '%';
-                    Editable = IsEditable;
                 }
                 field("Date"; Rec."Date")
                 {
                     ToolTip = 'Sutarties sudarymo data.', Comment = '%';
-                    Editable = IsEditable;
                 }
                 field("Auto No."; Rec."Auto No.")
                 {
                     ToolTip = 'Automobilio Nr.', Comment = '%';
-                    Editable = IsEditable;
                 }
                 field(ReservedFrom; Rec.ReservedFrom)
                 {
                     ToolTip = 'Automobilio rezervacijos pradžios data.', Comment = '%';
-                    Editable = IsEditable;
                 }
                 field(ReservedTo; Rec.ReservedTo)
                 {
                     ToolTip = 'Automobilio rezervacijos pabaigos data.', Comment = '%';
-                    Editable = IsEditable;
                 }
                 field(Amount; Rec.Amount)
                 {
                     ToolTip = 'Nuomos paslaugų suma.', Comment = '%';
-                    Editable = IsEditable;
                 }
                 field(Status; Rec.Status)
                 {
                     ToolTip = 'Sutarties būsena.', Comment = '%';
-                    Editable = IsEditable;
                 }
+            }
+            group(Lines)
+            {
+                Editable = IsEditable;
+                Caption = 'Paslaugos';
+                part(OrderLines; "SIGIAutoRentLine")
+                {
+                    // Shows rent lines related only to this specific rent header
+                    SubPageLink = "Document No." = field("Nr.");
+                }
+            }
+        }
+
+        area(FactBoxes)
+        {
+            part(DriverLicenseImage; "SIGIDriverLicenseImageFactBox")
+            {
+                SubPageLink = "Nr." = field("Nr.");
             }
         }
     }
@@ -74,7 +81,7 @@ page 74019 SIGIAutoRentHeaderCard
 
                 trigger OnAction()
                 begin
-                    Rec.SetStatusToReleased();
+                    SIGIAutoRentProcedures.SetStatusToReleased(Rec);
                 end;
             }
             action(Reopen)
@@ -85,7 +92,46 @@ page 74019 SIGIAutoRentHeaderCard
 
                 trigger OnAction()
                 begin
-                    Rec.SetStatusToOpen();
+                    SIGIAutoRentProcedures.SetStatusToOpen(Rec);
+                end;
+            }
+            action(PrintRentCard)
+            {
+                Caption = 'Spausdinti nuomos kortelę';
+                Image = Print;
+                ToolTip = 'Spausdinti šios nuomos dokumento ataskaitą';
+
+                trigger OnAction()
+                var
+                    RentHeaderRec: Record SIGIAutoRentHeader;
+                begin
+                    RentHeaderRec.Reset();
+                    RentHeaderRec.SetRange("Nr.", Rec."Nr."); // Filter by current record No.
+                    Report.RunModal(74010, true, false, RentHeaderRec); // 74010 is report id
+                end;
+            }
+            action("ViewReservations")
+            {
+                Caption = 'Rezervacijų sąrašas';
+                ToolTip = 'Peržiūrėti rezervacijų sąrašą';
+                Image = TaskList;
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    AutoReservationPage: Page "SIGIAutoReservation";
+                begin
+                    AutoReservationPage.Run();
+                end;
+            }
+            action(ReturnAuto)
+            {
+                Caption = 'Grąžinti automobilį';
+                Image = ReturnOrder;
+                ToolTip = 'Užbaigti automobilio nuomos sutartį.';
+
+                trigger OnAction()
+                begin
+                    SIGIAutoRentProcedures.ReturnAuto(Rec);
                 end;
             }
         }
@@ -101,17 +147,33 @@ page 74019 SIGIAutoRentHeaderCard
                 actionref(Reopen_Promoted; Reopen)
                 {
                 }
+                actionref(PrintRentCard_Promoted; PrintRentCard)
+                {
+                }
+                actionref(ViewReservations_Promoted; ViewReservations)
+                {
+                }
+                actionref(ReturnAuto_Promoted; ReturnAuto)
+                {
+                }
             }
         }
     }
 
     var
+        SIGIAutoRentProcedures: Codeunit SIGIAutoRentProcedures;
         IsEditable: Boolean;
 
     trigger OnAfterGetRecord()
     begin
-        // Set IsEditable to false if Status = Išduota, else true
+        // If status = Išduota, field editing is disabled
         IsEditable := Rec.Status <> Rec.Status::"Išduota";
+    end;
+
+    // Avoid all fields being disabled for editing upon creation
+    trigger OnNewRecord(BelowxRec: Boolean)
+    begin
+        IsEditable := true;
     end;
 
 }

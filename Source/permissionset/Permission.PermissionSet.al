@@ -14,6 +14,12 @@ permissionset 74010 SIGIPermissions
         tabledata SIGIAutoDamage = RIMD,
         table SIGIAutoDamage = X,
         tabledata SIGIAutoRentHeader = RIMD,
-        table SIGIAutoRentHeader = X;
-
+        table SIGIAutoRentHeader = X,
+        tabledata SIGIAutoRentLine = RIMD,
+        table SIGIAutoRentLine = X,
+        tabledata SIGIFinishedAutoRentHeader = RIMD,
+        table SIGIFinishedAutoRentHeader = x,
+        tabledata SIGIFinishedAutoRentLine = RIMD,
+        table SIGIFinishedAutoRentLine = x,
+        report SIGIAutoRent = X;
 }

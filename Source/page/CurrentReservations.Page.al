@@ -4,6 +4,7 @@ page 74016 SIGICurrentReservations
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = SIGIAutoReservation;
+    Caption = 'Galiojančios rezervacijos';
 
     layout
     {
@@ -35,9 +36,9 @@ page 74016 SIGICurrentReservations
         }
     }
 
+    // Filter reservations only valid from today
     trigger OnOpenPage()
     begin
-        // Showing reservations only valid from today
         Rec.SetFilter("ReservedTo", '>=%1', CreateDateTime(TODAY, 0T));
     end;
 }

@@ -8,7 +8,6 @@ table 74013 SIGIAuto
         field(1; "Nr."; Code[20])
         {
             Caption = 'Nr.';
-            //NotBlank = true; //taken care by OnInsert trigger
         }
         field(2; "Name"; Text[100])
         {
@@ -30,12 +29,13 @@ table 74013 SIGIAuto
 
             trigger OnValidate()
             var
-                CurrentYear: Integer;
-                ManufactureYearErr: Label 'Neteisingi pagaminimo metai';
+            //CurrentYear: Integer;
+            //ManufactureYearErr: Label 'Neteisingi pagaminimo metai';
             begin
-                CurrentYear := DATE2DMY(TODAY, 3); // Extracts current year as integer
-                if ("ManufactureYear" < 1885) or ("ManufactureYear" > CurrentYear) then
-                    Error(ManufactureYearErr);
+                //CurrentYear := DATE2DMY(TODAY, 3); // Extracts current year as integer
+                //if ("ManufactureYear" < 1885) or ("ManufactureYear" > CurrentYear) then
+                //    Error(ManufactureYearErr);
+                SIGIValidations.ValidateYear(Rec);
             end;
         }
         field(6; "InsuranceExpirationDate"; Date)
@@ -78,10 +78,8 @@ table 74013 SIGIAuto
         }
     }
 
-    fieldgroups
-    {
-        // Add changes to field groups here
-    }
+    var
+        SIGIValidations: Codeunit SIGIValidations;
 
     trigger OnInsert()
     var
@@ -99,21 +97,6 @@ table 74013 SIGIAuto
         Auto.SetLoadFields("Nr.");
         while Auto.Get("Nr.") do // runs until finds a unique number
             "Nr." := NoSeries.GetNextNo("No. Series");
-    end;
-
-    trigger OnModify()
-    begin
-
-    end;
-
-    trigger OnDelete()
-    begin
-
-    end;
-
-    trigger OnRename()
-    begin
-
     end;
 
 }

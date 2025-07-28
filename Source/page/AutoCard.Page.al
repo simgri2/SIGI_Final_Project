@@ -66,11 +66,11 @@ page 74014 SIGIAutoCard
                 ToolTip = 'Peržiūrėti rezervacijų sąrašą';
                 Image = TaskList;
                 ApplicationArea = All;
+
                 trigger OnAction()
                 var
                     AutoReservationPage: Page "SIGIAutoReservation";
                 begin
-                    //AutoReservationPage.SetAutoFilter(Rec."No.");
                     AutoReservationPage.Run();
                 end;
             }
@@ -80,11 +80,27 @@ page 74014 SIGIAutoCard
                 ToolTip = 'Peržiūrėti galiojančių rezervacijų sąrašą';
                 Image = JobListSetup;
                 ApplicationArea = All;
+
                 trigger OnAction()
                 var
                     CurrentReservationsPage: Page "SIGICurrentReservations";
                 begin
                     CurrentReservationsPage.Run();
+                end;
+            }
+            action(PrintCarRentHistory)
+            {
+                Caption = 'Spausdinti nuomos istoriją';
+                Image = Print;
+                ToolTip = 'Spausdinti pasirinkto automobilio nuomos istoriją';
+
+                trigger OnAction()
+                var
+                    SIGIAutoRec: Record SIGIAuto;
+                begin
+                    SIGIAutoRec.Reset();
+                    SIGIAutoRec.SetRange("Nr.", Rec."Nr."); // Filter by current record No.
+                    Report.RunModal(74011, true, false, SIGIAutoRec); // 74011 is report id
                 end;
             }
         }
@@ -97,6 +113,9 @@ page 74014 SIGIAutoCard
                 {
                 }
                 actionref(ViewCurrentReservations_Promoted; ViewCurrentReservations)
+                {
+                }
+                actionref(PrintCarRentHistory_Promoted; PrintCarRentHistory)
                 {
                 }
             }

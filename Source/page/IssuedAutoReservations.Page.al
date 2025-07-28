@@ -20,10 +20,6 @@ page 74020 SIGIIssuedAutoReservations
                 {
                     ToolTip = 'Kliento Nr.', Comment = '%';
                 }
-                field("Driver License Image"; Rec."Driver License Image")
-                {
-                    ToolTip = 'Vairuotojo pažymėjimo nuotrauka.', Comment = '%';
-                }
                 field("Date"; Rec."Date")
                 {
                     ToolTip = 'Sutarties sudarymo data.', Comment = '%';
@@ -50,15 +46,11 @@ page 74020 SIGIIssuedAutoReservations
                 }
             }
         }
-        area(Factboxes)
-        {
-
-        }
     }
 
+    // Filter only issued reservations (status = išduota)
     trigger OnOpenPage()
     begin
-        // Showing only issued reservations (status = išduota)
         Rec.SetFilter("Status", '=%1', Rec.Status::"Išduota");
     end;
 }

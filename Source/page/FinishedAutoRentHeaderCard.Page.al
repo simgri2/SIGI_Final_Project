@@ -1,18 +1,20 @@
-page 74018 SIGIAutoRentHeader
+page 74023 SIGIFinishedAutoRentHeaderCard
 {
-    PageType = List;
+    PageType = Card;
     ApplicationArea = All;
-    UsageCategory = Lists;
-    SourceTable = SIGIAutoRentHeader;
-    CardPageId = SIGIAutoRentHeaderCard;
-    Caption = 'SIGI Auto Rent Header';
+    UsageCategory = Administration;
+    SourceTable = SIGIFinishedAutoRentHeader;
+    Caption = 'SIGI Finished Auto Rent Header';
 
     layout
     {
         area(Content)
         {
-            repeater(GroupName)
+            group(GroupName)
             {
+                Editable = false;
+                Caption = 'Nuomos sutartis';
+
                 field("Nr."; Rec."Nr.")
                 {
                     ToolTip = 'Nuomos kortelės Nr.', Comment = '%';
@@ -41,10 +43,24 @@ page 74018 SIGIAutoRentHeader
                 {
                     ToolTip = 'Nuomos paslaugų suma.', Comment = '%';
                 }
-                field(Status; Rec.Status)
+            }
+            group(Lines)
+            {
+                Editable = false;
+                Caption = 'Paslaugos';
+                part(OrderLines; "SIGIFinishedAutoRentLine")
                 {
-                    ToolTip = 'Sutarties būsena.', Comment = '%';
+                    // Shows rent lines related only to this specific rent header
+                    SubPageLink = "Document No." = field("Nr.");
                 }
+            }
+        }
+
+        area(FactBoxes)
+        {
+            part(DriverLicenseImage; "SIGIDriverLicenseImageFactBox")
+            {
+                SubPageLink = "Nr." = field("Nr.");
             }
         }
     }

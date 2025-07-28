@@ -1,11 +1,11 @@
-page 74018 SIGIAutoRentHeader
+page 74022 SIGIFinishedAutoRentHeader
 {
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
-    SourceTable = SIGIAutoRentHeader;
-    CardPageId = SIGIAutoRentHeaderCard;
-    Caption = 'SIGI Auto Rent Header';
+    SourceTable = SIGIFinishedAutoRentHeader;
+    CardPageId = SIGIFinishedAutoRentHeaderCard;
+    Caption = 'SIGI Finished Auto Rent Header';
 
     layout
     {
@@ -13,6 +13,8 @@ page 74018 SIGIAutoRentHeader
         {
             repeater(GroupName)
             {
+                Editable = false;
+
                 field("Nr."; Rec."Nr.")
                 {
                     ToolTip = 'Nuomos kortelės Nr.', Comment = '%';
@@ -40,10 +42,6 @@ page 74018 SIGIAutoRentHeader
                 field(Amount; Rec.Amount)
                 {
                     ToolTip = 'Nuomos paslaugų suma.', Comment = '%';
-                }
-                field(Status; Rec.Status)
-                {
-                    ToolTip = 'Sutarties būsena.', Comment = '%';
                 }
             }
         }

@@ -58,8 +58,6 @@ page 74013 SIGIAuto
         }
     }
 
-
-
     actions
     {
         area(Processing)
@@ -70,11 +68,11 @@ page 74013 SIGIAuto
                 ToolTip = 'Peržiūrėti rezervacijų sąrašą';
                 Image = TaskList;
                 ApplicationArea = All;
+
                 trigger OnAction()
                 var
                     AutoReservationPage: Page "SIGIAutoReservation";
                 begin
-                    //AutoReservationPage.SetAutoFilter(Rec."No.");
                     AutoReservationPage.Run();
                 end;
             }
@@ -84,6 +82,7 @@ page 74013 SIGIAuto
                 ToolTip = 'Peržiūrėti galiojančių rezervacijų sąrašą';
                 Image = JobListSetup;
                 ApplicationArea = All;
+
                 trigger OnAction()
                 var
                     CurrentReservationsPage: Page "SIGICurrentReservations";

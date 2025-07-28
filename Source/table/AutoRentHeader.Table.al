@@ -3,13 +3,11 @@ table 74016 SIGIAutoRentHeader
     DataClassification = CustomerContent;
     Caption = 'SIGI Auto Rent Header';
 
-
     fields
     {
         field(1; "Nr."; Code[20])
         {
             Caption = 'Nr.';
-
         }
         field(2; "Client No."; Code[20])
         {
@@ -29,20 +27,37 @@ table 74016 SIGIAutoRentHeader
         {
             Caption = 'Automobilio Nr.';
             TableRelation = SIGIAuto."Nr.";
+            trigger OnValidate()
+            var
+                SIGIAutoRentProcedures: Codeunit SIGIAutoRentProcedures;
+            begin
+                SIGIAutoRentProcedures.CreateFirstRentLine(Rec);
+            end;
         }
         field(6; "ReservedFrom"; Date)
         {
             Caption = 'Rezervuota nuo data';
+            trigger OnValidate()
+            begin
+                this.SIGIValidationsCodeunit.ValidateReservationExists(Rec);
+                this.SIGIAutoRentProcedures.CalcDuration(Rec);
+            end;
         }
         field(7; "ReservedTo"; Date)
         {
             Caption = 'Rezervuota iki data';
+            trigger OnValidate()
+            begin
+                this.SIGIValidationsCodeunit.ValidateReservationExists(Rec);
+                this.SIGIAutoRentProcedures.CalcDuration(Rec);
+            end;
         }
         field(8; "Amount"; Decimal)
         {
-            //FieldClass = FlowField;
             Caption = 'Amount';
-            //CalcFormula = Sum("Auto Rent Line".Amount where("Document No." = field("No.")));
+            Editable = false;
+            FieldClass = FlowField;
+            CalcFormula = sum(SIGIAutoRentLine.Amount where("Document No." = field("Nr.")));
         }
         field(9; "Status"; Enum SIGIAutoRentStatus)
         {
@@ -54,6 +69,29 @@ table 74016 SIGIAutoRentHeader
             Caption = 'No. Series';
             Editable = false;
             TableRelation = "No. Series";
+        }
+        field(30; "Duration"; Integer)
+        {
+            Editable = false;
+        }
+        // hidden fields that are accessed when creating a report
+        field(40; "Auto Mark"; Code[20])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(SIGIAuto.Mark where("Nr." = field("Auto No.")));
+            Editable = false;
+        }
+        field(50; "Auto Model"; Code[20])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(SIGIAuto.Model where("Nr." = field("Auto No.")));
+            Editable = false;
+        }
+        field(60; "Client Name"; Text[100])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Customer.Name where("No." = field("Client No.")));
+            Editable = false;
         }
     }
 
@@ -67,6 +105,7 @@ table 74016 SIGIAutoRentHeader
 
     var
         SIGIValidationsCodeunit: Codeunit "SIGIValidations";
+        SIGIAutoRentProcedures: Codeunit SIGIAutoRentProcedures;
 
     trigger OnInsert()
     var
@@ -74,7 +113,10 @@ table 74016 SIGIAutoRentHeader
         Auto: Record SIGIAuto;
         NoSeries: Codeunit "No. Series";
     begin
-        Status := Enum::"SIGIAutoRentStatus"::Atidaryta; // document is in status OPEN upon creation
+        // Set document status to OPEN upon creation
+        Status := Enum::"SIGIAutoRentStatus"::Atidaryta;
+
+        // Automatically assign Nr. from AutoSetup number series
         AutoSetup.GetRecordOnce();
         if NoSeries.AreRelated(AutoSetup."Rent Card Series", xRec."No. Series") then
             "No. Series" := xRec."No. Series"
@@ -85,46 +127,21 @@ table 74016 SIGIAutoRentHeader
         Auto.SetLoadFields("Nr.");
         while Auto.Get("Nr.") do // runs until finds a unique number
             "Nr." := NoSeries.GetNextNo("No. Series");
-
-        SIGIValidationsCodeunit.ValidateReservationExists(Rec);
     end;
 
     trigger OnModify()
     begin
-        CheckIsOpen();
-        //SIGIValidationsCodeunit.ValidateReservationExists(Rec);
+        //CheckIsOpen();
     end;
 
-    procedure SetStatusToReleased()
-    var
-        ReleaseMsg: Label 'Dokumentas jau yra išduotas.';
-    begin
-        if Status = Status::"Išduota" then begin
-            Message(ReleaseMsg);
-            exit;
+    /*
+        local procedure CheckIsOpen()
+        var
+            MustBeOpenErr: Label 'Šiam veiksmui atlikti statusas turi būti "Atidaryta"';
+        begin
+            if Status <> Status::"Atidaryta" then
+                Error(MustBeOpenErr);
         end;
-        Status := Status::"Išduota";
-        Modify(false);
-    end;
-
-    procedure SetStatusToOpen()
-    var
-        OpenMsg: Label 'Dokumentas jau yra atidarytas.';
-    begin
-        if Status = Status::"Atidaryta" then begin
-            Message(OpenMsg);
-            exit;
-        end;
-        Status := Status::"Atidaryta";
-        Modify(false);
-    end;
-
-    local Procedure CheckIsOpen()
-    var
-        MustBeOpenErr: Label 'Šiam veiksmui atlikti statusas turi būti "Išduota"';
-    begin
-        if Status <> Status::"Išduota" then
-            Error(MustBeOpenErr);
-    end;
+        */
 
 }
