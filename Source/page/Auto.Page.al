@@ -90,6 +90,21 @@ page 74013 SIGIAuto
                     CurrentReservationsPage.Run();
                 end;
             }
+            action(PrintCarRentHistory)
+            {
+                Caption = 'Spausdinti nuomos istoriją';
+                Image = Print;
+                ToolTip = 'Spausdinti pasirinkto automobilio nuomos istoriją';
+
+                trigger OnAction()
+                var
+                    SIGIAutoRec: Record SIGIAuto;
+                begin
+                    SIGIAutoRec.Reset();
+                    SIGIAutoRec.SetRange("Nr.", Rec."Nr."); // Filter by current record No.
+                    Report.RunModal(74011, true, false, SIGIAutoRec); // 74011 is report id
+                end;
+            }
         }
         area(Promoted)
         {
@@ -100,6 +115,9 @@ page 74013 SIGIAuto
                 {
                 }
                 actionref(ViewCurrentReservations_Promoted; ViewCurrentReservations)
+                {
+                }
+                actionref(PrintCarRentHistory_Promoted; PrintCarRentHistory)
                 {
                 }
             }

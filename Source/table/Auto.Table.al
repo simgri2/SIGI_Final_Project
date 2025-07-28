@@ -29,12 +29,7 @@ table 74013 SIGIAuto
 
             trigger OnValidate()
             var
-            //CurrentYear: Integer;
-            //ManufactureYearErr: Label 'Neteisingi pagaminimo metai';
             begin
-                //CurrentYear := DATE2DMY(TODAY, 3); // Extracts current year as integer
-                //if ("ManufactureYear" < 1885) or ("ManufactureYear" > CurrentYear) then
-                //    Error(ManufactureYearErr);
                 SIGIValidations.ValidateYear(Rec);
             end;
         }
@@ -54,7 +49,7 @@ table 74013 SIGIAuto
         field(9; "RentalService"; Code[20])
         {
             Caption = 'Nuomos paslauga';
-            TableRelation = Resource; //patikslinti!!!
+            TableRelation = Resource;
         }
         field(10; "RentalCost"; Decimal)
         {

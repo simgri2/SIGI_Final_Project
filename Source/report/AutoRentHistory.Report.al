@@ -1,4 +1,4 @@
-report 74011 AutoRentHistory
+report 74011 SIGIAutoRentHistory
 {
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = All;
@@ -14,7 +14,7 @@ report 74011 AutoRentHistory
             column(Mark; Mark) { }
             column(Model; Model) { }
 
-            dataitem(SIGIAutoRentHeader; SIGIAutoRentHeader)
+            dataitem(SIGIFinishedAutoRentHeader; SIGIFinishedAutoRentHeader)
             {
                 // suggestive filter that pops up for user in UI to fill in
                 RequestFilterFields = "ReservedFrom", "ReservedTo";
@@ -62,6 +62,6 @@ report 74011 AutoRentHistory
 
     labels
     {
-        ReportName = 'Automobilio nuomos istorijos spausdinys';
+        ReportName = 'Automobilio nuomos istorijos ataskaita';
     }
 }

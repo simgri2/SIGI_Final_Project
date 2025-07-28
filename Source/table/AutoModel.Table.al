@@ -10,7 +10,6 @@ table 74012 SIGIAutoModel
             Caption = 'Auto mark code.';
             TableRelation = SIGIAutoMark;
             NotBlank = true;
-
         }
         field(2; "ModelCode"; Code[20])
         {
@@ -30,11 +29,4 @@ table 74012 SIGIAutoModel
             Clustered = true;
         }
     }
-
-    fieldgroups
-    {
-        // Add changes to field groups here
-    }
-
-
 }

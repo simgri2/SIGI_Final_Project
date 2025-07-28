@@ -128,20 +128,4 @@ table 74016 SIGIAutoRentHeader
         while Auto.Get("Nr.") do // runs until finds a unique number
             "Nr." := NoSeries.GetNextNo("No. Series");
     end;
-
-    trigger OnModify()
-    begin
-        //CheckIsOpen();
-    end;
-
-    /*
-        local procedure CheckIsOpen()
-        var
-            MustBeOpenErr: Label 'Šiam veiksmui atlikti statusas turi būti "Atidaryta"';
-        begin
-            if Status <> Status::"Atidaryta" then
-                Error(MustBeOpenErr);
-        end;
-        */
-
 }

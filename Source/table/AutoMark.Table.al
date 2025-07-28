@@ -24,33 +24,12 @@ table 74011 "SIGIAutoMark"
         }
     }
 
-    fieldgroups
-    {
-        // Add changes to field groups here
-    }
-
     trigger OnInsert()
     var
         AutoMarkRec: Record "SIGIAutoMark";
     begin
         if AutoMarkRec.Get("Code") then
             Error('Automobilio markės kodas %1 jau egzistuoja sąraše.', "Code");
-    end;
-
-
-    trigger OnModify()
-    begin
-
-    end;
-
-    trigger OnDelete()
-    begin
-
-    end;
-
-    trigger OnRename()
-    begin
-
     end;
 
 }

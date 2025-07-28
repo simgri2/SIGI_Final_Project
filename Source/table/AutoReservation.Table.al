@@ -39,11 +39,6 @@ table 74014 "SIGIAutoReservation"
         }
     }
 
-    fieldgroups
-    {
-        // Add changes to field groups here
-    }
-
     var
         SIGIValidationsCodeunit: Codeunit "SIGIValidations";
 
@@ -56,16 +51,4 @@ table 74014 "SIGIAutoReservation"
     begin
         this.SIGIValidationsCodeunit.ValidateReservationDates(Rec);
     end;
-
-    trigger OnDelete()
-    begin
-
-    end;
-
-    trigger OnRename()
-    begin
-
-    end;
-
-
 }
